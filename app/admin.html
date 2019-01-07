@@ -1,0 +1,121 @@
+<html>
+      <head>
+              <!-- Latest compiled and minified CSS -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            <!-- jQuery library -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <!-- Latest compiled JavaScript -->
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      </head>
+        <body>
+          <!-- Navigation bar -->
+          <div id="pag-nav">
+            <nav class="navbar navbar-inverse">
+                 <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-sm-4">
+                       <ul class="nav navbar-nav">
+                         <li class="home"><a href="index.html">Home</a></li>
+                         <li class="user"><a href="user.html">User</a></li>
+                        <li class="admin active"><a href="admin.html">Admin</a></li>
+                       </ul>
+                     </div>
+                    <div class="col-sm-4" style="text-align:center">
+                       <div class="navbar-header">
+                         <a class="navbar-brand" href="#">Bug Bounty Program</a>
+                       </div>
+                     </div>
+                     <div class="col-sm-4">
+                        <div class="navbar-header" style="float:right">
+                          <a class="navbar-brand" href="#" >Decentralized Application</a>
+                        </div>
+                      </div>
+                  </div>
+
+                 </div>
+             </nav>
+           </div>
+         <!-- Navigation Bar ends -->
+            <div class="container-fluid">
+              <div class="row isOwner" >
+                   <div class="col-sm-offset-10 col-sm-2">
+                          <button type="button" class="btn btn-primary btn-lg"  data-toggle="modal" data-target="#addAdminTags">Add Validators</button>
+                   </div>
+              </div>
+              <!-- Modal -->
+              <div class="modal fade" id="addAdminTags" role="dialog">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Add Validators</h4>
+                    </div>
+                    <div class="modal-body">
+                      <form>
+                            <div class="form-group">
+                                  <label for="tag">Validators Address</label>
+                                  <input  class="form-control" id="validatorsAddress">
+                            </div>
+                            <div class="dropdown">
+                                  <select class="form-control" id="dropdownlist">
+                                      <option>----Select Tag-----</option>
+                                  </select>
+                            </div>
+                            <button onclick="App.addValidator(); return false;" class="btn btn-default">Submit</button>
+                        </form>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- Modal ends -->
+              <div class="row">
+                    <div class="col-sm-offset-1  col-sm-8">
+                          <div class="row">
+                              <form class="isOwner">
+                                    <div class="form-group">
+                                          <label for="tag">Add tag</label>
+                                          <input  class="form-control" id="tag">
+                                        </div>
+                                    <button onclick="App.addTag(); return false;" class="btn btn-default">Submit</button>
+                                </form>
+                          </div>
+                          <div class="row">
+                                <div class="col-sm-12">
+                                    <h2>Validate the Posts</h2>
+                                    <table class="table .table-striped tableDesign" style="border-collapse: unset;" >
+                                        <thead>
+                                            <tr>
+                                              <th>#</th>
+                                              <th>Bug Type</th>
+                                              <th>Acceptance Votes</th>
+                                              <th>Approve</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="adminPostTable">
+
+                                        </tbody>
+                                    </table>
+                               </div>
+                          </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <br>
+                        <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Tags</th>
+                                </tr>
+                              </thead>
+                              <tbody id="tag-available">
+                              </tbody>
+                          </table>
+                    </div>
+              </div>   <!--  row ends -->
+          </div>
+        </body>
+        <script src="./admin.js"></script>
+</html>
