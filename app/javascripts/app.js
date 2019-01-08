@@ -32,11 +32,11 @@ window.App = {
   // Read all user Posts
   readAllUserPost:function(){
           var self = this;
-          console.log("default post count "+userPostCount);
+          // console.log("default post count "+userPostCount);
           Post.deployed().then(function(contractInstance) {
                  contractInstance.postCount.call().then(function(count) {
                  userPostCount=count;
-                 console.log("post count "+userPostCount);
+                 // console.log("post count "+userPostCount);
                    for(var i=0; i< userPostCount;i++){
                      self.populateTablePosts(i);
                    }
@@ -48,7 +48,7 @@ window.App = {
 
   //Populate table Posts
   populateTablePosts:function(post){
-        console.log("read post "+post);
+        // console.log("read post "+post);
           Post.deployed().then(function(contractInstance) {
                var serialNumber=Number(post)+1;
                // console.log("read serial "+serialNumber);
@@ -66,7 +66,7 @@ window.App = {
           var self = this;
           Post.deployed().then(function(contractInstance) {
                  contractInstance.getTagsOfAdmin.call(account).then(function(ret) {
-                    console.log("checkAdmin  "+ret.length +" "+ account);
+                    // console.log("checkAdmin  "+ret.length +" "+ account);
                     if(ret.length == 0){
                         $('.admin').css("display","none");
                         self.checkOwner();
@@ -84,7 +84,7 @@ window.App = {
           var self = this;
           Post.deployed().then(function(contractInstance) {
                  contractInstance.checkForOwner.call(account).then(function(ret) {
-                    console.log("checkOwner  "+ret+" ");
+                    // console.log("checkOwner  "+ret+" ");
                     if(!ret){
                         $('.admin').css("display","none");
                     } else {
@@ -95,7 +95,6 @@ window.App = {
           });
   },
   //Check for Owner Ends
-
 
 
 

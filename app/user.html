@@ -67,10 +67,16 @@
                               <label for="comment">Proof of Concept</label>
                               <textarea class="form-control" rows="10" id="proofOfConcept" placeholder="Your report must include clear and descriptive replication steps so that the organization can easily reproduce and validate your findings."></textarea>
                         </div>
-                        <div class="dropdown">
-                              <select class="form-control" id="dropdownlist">
-                                  <option>----Select Tag-----</option>
-                              </select>
+                        <div class="form-inline">
+                            <div class="form-group">
+                                  <label for="" style="font-weight:500">Tokens Bet</label>
+                                  <input class="modelTokensBet" id="modelTokensBet" type="text" style="" placeholder="Maximum 50 Tokens"/>
+                            </div>
+                            <div class="form-group dropdown" style="margin-left:30px">
+                                  <select class="form-control" id="dropdownlist">
+                                      <option>----Select Bug Tag-----</option>
+                                  </select>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -100,16 +106,69 @@
                       </tbody>
                     </table>
                    </div>
-                  <div class="col-sm-offset-1  col-sm-2">
-                      <table class="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Tags</th>
-                              </tr>
-                            </thead>
-                            <tbody id="tag-available">
-                            </tbody>
+                  <div class="col-sm-3">
+                     <!-- Tokens info table -->
+                    <h3>Tokens</h3>
+                    <div class="table-responsive tokenTable">
+                        <table class="table table-bordered">
+                            <tr>
+                               <th>Tokens Info</th>
+                               <th>Value</th>
+                            </tr>
+                            <tr>
+                               <td>Tokens For Sale</td>
+                               <td id="tokens-total"></td>
+                            </tr>
+                            <tr>
+                               <td>Tokens Sold</td>
+                               <td id="tokens-sold"></td>
+                            </tr>
+                            <tr>
+                               <td>Price Per Token</td>
+                               <td id="token-cost"></td>
+                            </tr>
+                            <tr>
+                               <td>Bounty Tokens Available</td>
+                               <td id="bounty-tokens"></td>
+                            </tr>
+                            <tr>
+                               <td>Balance in the contract</td>
+                               <td id="contract-balance"></td>
+                            </tr>
                         </table>
+                    </div>
+                    <!-- Tokens info table -->
+                    <!-- Purchase tokens -->
+                    <div class="purchaseTokens col-sm-12">
+                      <h3>Purchase Tokens</h3>
+                      <div id="buy-msg"></div>
+                      <input type="text" id="buy" class="col-sm-8" placeholder="Number of tokens to buy"/>
+                      <a href="#" onclick="App.buyTokens(); return false;" class="btn btn-primary">Buy</a>
+                    </div>
+                      <!-- Purchase tokens ends -->
+                      <!-- Look up user info -->
+                      <div class="lookupInfo col-sm-12 margin-top-3 form">
+                       <h3 class="">Lookup User Info</h3>
+                       <input type="text" id="user-info", class="col-sm-8" placeholder="Enter the User address" />
+                       <a href="#" onclick="App.lookupUserInfo(); return false;" class="btn btn-primary">Lookup</a>
+                       <div class="user-details row text-left">
+                                <div id="tokens-bought-text" class="margin-top-3 col-md-6"></div>   <div id="tokens-bought" class="margin-top-3 col-md-6"></div>
+                                <div id="tokens-used-text" class="margin-top-3 col-md-6"></div>   <div id="tokens-used" class="margin-top-3 col-md-6"></div>
+                       </div>
+                      </div>
+
+                      <!-- Look up user info ends-->
+                     <div class="col-sm-12">
+                        <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Tags</th>
+                                </tr>
+                              </thead>
+                              <tbody id="tag-available">
+                              </tbody>
+                          </table>
+                      </div>
                   </div>
               </div>   <!--  row ends -->
           </div>

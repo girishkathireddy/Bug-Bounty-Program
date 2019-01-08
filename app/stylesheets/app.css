@@ -61,3 +61,33 @@ body {
       color: #AAA;
       font-size: 24px;
 }
+
+.tokenTable tr td{
+  font-size: 0.8em;
+}
+
+.purchaseTokens input{
+  min-height: 35px;
+  font-size: 0.7em;
+}
+
+.purchaseTokens #buy-msg{
+    font-size: 0.7em;
+}
+
+.lookupInfo input{
+    font-size: 0.7em;
+    min-height: 35px;
+}
+
+.lookupInfo{
+  margin-bottom: 20px;
+}
+
+.user-details{
+  font-size: 0.7em;
+}
+
+.modelTokensBet{
+  font-size:0.7em;width:300px;min-height:35px;
+}

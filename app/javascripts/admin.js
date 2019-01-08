@@ -36,9 +36,9 @@ window.App = {
   addTag:function(){
         var self = this;
         let tagValue = $("#tag").val();
-        console.log("In Add Tag" + tagValue);
+        // console.log("In Add Tag" + tagValue);
         Post.deployed().then(function(contractInstance) {
-            console.log("In Add Tag 1");
+            // console.log("In Add Tag 1");
             contractInstance.addTags(tagValue,{gas: 140000, from: web3.eth.accounts[0]}).then(function() {
               self.readTag();
                 return;
@@ -71,12 +71,12 @@ window.App = {
   // Read user Posts for admin
   readPostbyAdmin:function(){
           var self = this;
-          console.log("default post count "+userPostCount);
+          // console.log("default post count "+userPostCount);
           $("#adminPostTable tr").remove();
           Post.deployed().then(function(contractInstance) {
                  contractInstance.postCount.call().then(function(count) {
                  userPostCount=count;
-                 console.log("post count "+userPostCount);
+                 // console.log("post count "+userPostCount);
                    for(var i=0; i< userPostCount;i++){
                      self.populateTablePosts(i);
                    }
@@ -88,7 +88,7 @@ window.App = {
 
   //Populate table Posts
   populateTablePosts:function(post){
-        console.log("read post "+post);
+        // console.log("read post "+post);
           Post.deployed().then(function(contractInstance) {
                var serialNumber=Number(post)+1;
                  contractInstance.readPostByIndex.call(post).then(function(results) {
@@ -107,9 +107,10 @@ window.App = {
   approvePosts:function(element){
         var self = this;
         var  row = $(element).parents('tr').find('td:first').text();
-        console.log("Table index " + row);
+        var splitData= row.split("#");
+        // console.log("Table index " + row);
         Post.deployed().then(function(contractInstance) {
-            contractInstance.voteByAdmin(Number(row)-1,{gas: 140000, from: account}).then(function() {
+            contractInstance.voteByAdmin(Number(splitData[0])-1,{gas: 140000, from: account}).then(function() {
               var  votes = $(element).parents('tr').find('td:nth-child(3)').text();
               $(element).parents('tr').find('td:nth-child(3)').html(Number(votes)+1);
               self.readPostbyAdmin();
@@ -128,7 +129,7 @@ window.App = {
           var self = this;
           let validator = $("#validatorsAddress").val();
           let tag= $("#dropdownlist").val();
-           console.log("validator " + validator);
+           // console.log("validator " + validator);
           Post.deployed().then(function(contractInstance) {
               contractInstance.addTagsToAdmins(validator,tag,{gas: 140000, from: web3.eth.accounts[0]}).then(function() {
                   return;
@@ -155,9 +156,9 @@ window.App = {
            adminTags={};
            Post.deployed().then(function(contractInstance) {
                   contractInstance.getTagsOfAdmin.call(account).then(function(ret) {
-                     console.log("readadmin tags "+ret.length +" "+ account);
+                     // console.log("readadmin tags "+ret.length +" "+ account);
                             Object.keys(ret).forEach(function (r) {
-                              console.log("Inside");
+                              // console.log("Inside");
                               adminTags[r]= web3.toUtf8(ret[r]);
                             });
                         self.readPostbyAdmin();
@@ -172,7 +173,7 @@ window.App = {
            var self = this;
            Post.deployed().then(function(contractInstance) {
                   contractInstance.getTagsOfAdmin.call(account).then(function(ret) {
-                     console.log("checkAdmin  "+ret.length +" "+ account);
+                     // console.log("checkAdmin  "+ret.length +" "+ account);
                      if(ret.length == 0){
                          $('.admin').css("display","none");
                          self.checkOwner();
@@ -190,7 +191,7 @@ window.App = {
            var self = this;
            Post.deployed().then(function(contractInstance) {
                   contractInstance.checkForOwner.call(account).then(function(ret) {
-                     console.log("checkOwner  "+ret+" ");
+                     // console.log("checkOwner  "+ret+" ");
                      if(!ret){
                          $('.isOwner').css("display","none");
                      } else {

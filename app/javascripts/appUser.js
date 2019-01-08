@@ -20,6 +20,8 @@ import { default as contract } from 'truffle-contract'
  var allTags = {};
  var userPostCount=0;
  var account = web3.eth.accounts[0];
+ var tokenPrice = null;
+ var userTokens=0;
 
 
 
@@ -29,6 +31,7 @@ window.App = {
    var self = this;
    self.readTag();
    self.readUserPost();
+   self.populateTokenData();
   },
 
 
@@ -64,11 +67,21 @@ window.App = {
         let post = $("#postContent").val();
         let tag= $("#dropdownlist").val();
         let proofOfConcept=$("#proofOfConcept").val();
-        console.log("In addUserPost" + tag);
-        console.log("In addUserPost" + post);
+        let tokensBet= $("#modelTokensBet").val();
+        // console.log("In addUserPost" + tag);
+        // console.log("In addUserPost" + userTokens);
+        // console.log("In addUserPost" + tokensBet);
+        if (tokensBet > userTokens ){
+          alert('Insufficient Tokens. Please purchase.');
+          return false;
+        } else if (tokensBet > 50 ){
+          alert('Maximum limit 50 Tokens');
+          return false;
+        }
         Post.deployed().then(function(contractInstance) {
-            contractInstance.addUserPost(tag,post,proofOfConcept,{from: web3.eth.accounts[0],gas: 1400000}).then(function(v) {
+            contractInstance.addUserPost(tag,post,proofOfConcept,tokensBet,{from: web3.eth.accounts[0],gas: 1400000}).then(function(v) {
             self.populateTablePosts(userPostCount);
+            self.populateTokenData();
                 return;
          });
 
@@ -79,7 +92,7 @@ window.App = {
       // Read user Posts
       readUserPost:function(){
               var self = this;
-              console.log("read user post count "+userPostCount);
+              // console.log("read user post count "+userPostCount);
               Post.deployed().then(function(contractInstance) {
                      contractInstance.postCount.call().then(function(count) {
                      userPostCount=count;
@@ -97,12 +110,12 @@ window.App = {
       //Populate table Posts
       populateTablePosts:function(post){
               var self = this;
-              console.log("read post "+post);
+              // console.log("read post "+post);
               Post.deployed().then(function(contractInstance) {
                    var serialNumber=Number(post)+1;
-                   console.log("read serial "+serialNumber);
+                   // console.log("read serial "+serialNumber);
                      contractInstance.readPostByIndex.call(post).then(function(results) {
-                       console.log(account);
+                       // console.log(account);
                         if(account==results[2]) {
                             $("#userPostTable").append("<tr class='accordion-toggle' data-toggle='collapse' data-target='.child"+serialNumber+"'><td><i class='fa fa-caret-square-o-right' aria-hidden='true' style='color:#e76f34'></i></i> "+serialNumber+"<p style='font-size:8px;'>#Click to Expand</p></td><td>"+results[1]+"</td><td>"+results[4]+"</td></tr><tr class='accordion-body  collapse child"+serialNumber+"'><td colspan='3'> "+results[5]+"</td></tr>");
                              return;
@@ -118,7 +131,7 @@ window.App = {
               var self = this;
               Post.deployed().then(function(contractInstance) {
                      contractInstance.getTagsOfAdmin.call(account).then(function(ret) {
-                        console.log("checkAdmin  "+ret.length +" "+ account);
+                        // console.log("checkAdmin  "+ret.length +" "+ account);
                         if(ret.length == 0){
                             $('.admin').css("display","none");
                             self.checkOwner();
@@ -136,7 +149,7 @@ window.App = {
               var self = this;
               Post.deployed().then(function(contractInstance) {
                      contractInstance.checkForOwner.call(account).then(function(ret) {
-                        console.log("checkOwner  "+ret+" ");
+                        // console.log("checkOwner  "+ret+" ");
                         if(!ret){
                             $('.admin').css("display","none");
                         } else {
@@ -147,6 +160,81 @@ window.App = {
               });
       },
       //Check for Owner Ends
+
+
+// Token info table
+      populateTokenData: function() {
+          Post.deployed().then(function(contractInstance) {
+           contractInstance.totalTokens.call().then(function(v) {
+            $("#tokens-total").html(v.toString());
+           });
+           contractInstance.tokensSold.call().then(function(v) {
+            $("#tokens-sold").html(v.toString());
+           });
+           contractInstance.tokenPrice.call().then(function(v) {
+            tokenPrice = parseFloat(web3.fromWei(v.toString()));
+            $("#token-cost").html(tokenPrice + " Ether");
+           });
+           contractInstance.bountyTokens.call().then(function(v) {
+            $("#bounty-tokens").html(v.toString());
+           });
+           web3.eth.getBalance(contractInstance.address, function(error, result) {
+            $("#contract-balance").html(web3.fromWei(result.toString()) + " Ether");
+           });
+          });
+       },
+// Token info table  ends
+
+// Buy Tokens
+        buyTokens: function() {
+            var self = this;
+            let tokensToBuy = $("#buy").val();
+            let price = tokensToBuy * tokenPrice;
+            $("#buy-msg").html("Purchase order has been submitted. Please wait.");
+            Post.deployed().then(function(contractInstance) {
+             contractInstance.buy({value: web3.toWei(price, 'ether'), from: web3.eth.accounts[0]}).then(function(v) {
+              $("#buy-msg").html("");
+              self.populateTokenData();
+              self.getuserTokens();
+             })
+            });
+
+        },
+// Buy Tokens ends
+
+// user info look up
+  lookupUserInfo:function(){
+  let lookUpAddress = $("#user-info").val();
+  // var myNode = document.getElementById("votes-cast");
+  //   $(this).empty();
+  Post.deployed().then(function(contractInstance) {
+  contractInstance.userDetails.call(lookUpAddress).then(function(v) {
+
+      $("#tokens-bought-text").html("Tokens Purchased");
+      $("#tokens-bought").html(v[0].toString());
+      $("#tokens-used-text").html("Tokens Spent");
+      $("#tokens-used").html(v[1].toString());
+    });
+
+  });
+
+},
+// user info look up ends
+
+// get user tokens
+  getuserTokens:function(){
+    Post.deployed().then(function(contractInstance) {
+    contractInstance.userDetails.call(account).then(function(v) {
+       let tokensPurchased= v[0];
+       let tokensSpent= v[1];
+       userTokens= tokensPurchased -tokensSpent;
+       // console.log("user tokens "+userTokens);
+      });
+
+    });
+
+ },
+// get user tokens ends
 
 
 };
@@ -165,12 +253,13 @@ $( document ).ready(function() {
 
     App.start();
     App.checkAdmin();
-
+    App.getuserTokens();
     var accountInterval = setInterval(function() {
         if (web3.eth.accounts[0] !== account) {
           account = web3.eth.accounts[0];
           App.readUserPost();
           App.checkAdmin();
+          App.getuserTokens();
         }
       }, 100);
 
